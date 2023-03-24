@@ -7,9 +7,12 @@ mod request;
 mod timefromcoordinates;
 mod timefromplace;
 
+use prettytable::{row, Cell, Row, Table};
+
 use std::env;
 
 fn main() {
+    let mut table = Table::new();
     let args: Vec<String> = env::args().collect();
 
     if args.len() < 2 {
@@ -55,10 +58,37 @@ fn main() {
 
     let city = time_from_coordinates.get_times();
 
+    table.add_row(row![
+        "Tarih", "Imsak", "Gunes", "Ogle", "Ikindi", "Aksam", "Yatsi"
+    ]);
+
+    println!("\nBugunun ibadet saatleri:");
+
+    let mut aksam = String::new();
+
     for (timezone, times) in city {
-        println!(
-            "{}: \n\tImsak: {} \n\tGunes: {}, \n\tOgle: {}, \n\tIkindi: {}, \n\tAksam: {}, \n\tYatsi: {}",
-            timezone, times[0], times[1], times[2], times[3], times[4], times[5]
-        );
+        let row = Row::new(vec![
+            Cell::new(&timezone),
+            Cell::new(&times[0]),
+            Cell::new(&times[1]),
+            Cell::new(&times[2]),
+            Cell::new(&times[3]),
+            Cell::new(&times[4]),
+            Cell::new(&times[5]),
+        ]);
+
+        aksam = times[4].to_owned().to_string();
+
+        table.add_row(row);
     }
+
+    table.printstd();
+
+    // check if aksam is grater than time now and if it is then print aksam time
+
+    // parse akşam and time now to i32
+    // but aksam variable format is HH:MM and time now format is HH:MM:SS
+    // so we need to remove :SS from time now
+
+    // TODO: print remaining time to aksam
 }
