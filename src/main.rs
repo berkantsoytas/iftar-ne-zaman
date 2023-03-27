@@ -6,7 +6,10 @@ mod regions;
 mod request;
 mod timefromcoordinates;
 mod timefromplace;
-
+//-------------------
+use crate::args_config::Config;
+mod args_config;
+//-----------------------
 use prettytable::{row, Cell, Row, Table};
 
 use termion::{color, style};
@@ -16,21 +19,24 @@ use std::{
     io::{stdout, Write},
 };
 
+
 fn main() {
     let mut table = Table::new();
     let args: Vec<String> = env::args().collect();
+    let mut conf = Config::new(args);
+    conf.capitalize_first_letter();
+    //------------------------------------------
+    // if args.len() < 2 {
+    //     print!("Usage: {} [country] [region] [city]", args[0]);
+    //     return;
+    // }
 
-    if args.len() < 2 {
-        print!("Usage: {} [country] [region] [city]", args[0]);
-        return;
-    }
-
-    let country: &String = &args[1];
-    let region: &String = &args[2];
-    let city: &String = &args[3];
-
+    // let country: &String = &args[1];
+    // let region: &String = &args[2];
+    // let city: &String = &args[3];
+    //----------------------------------------------
     let coordinates: coordinates::Coordinates =
-        coordinates::Coordinates::new(country, region, city);
+        coordinates::Coordinates::new(&conf.country,&conf.city,&conf.region);
 
     let coordinate: &coordinates::Coordinates = coordinates.get_coordinates();
 
