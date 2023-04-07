@@ -6,7 +6,7 @@ pub struct Config {
 
 //I saw that the api used has great minor precision
 //if "turkey ankara ankara" is written the api does not accept the request
-
+#[allow(dead_code)]
 impl Config {
     pub fn new(args: Vec<String>) -> Config {
         if args.len() < 2 {
@@ -19,9 +19,9 @@ impl Config {
         let city = args[3].clone().to_lowercase();
 
         Config {
-            city,
-            country,
-            region,
+            city: city[0..1].to_ascii_uppercase() + &city[1..],
+            country: country[0..1].to_ascii_uppercase() + &country[1..],
+            region: region[0..1].to_ascii_uppercase() + &region[1..],
         }
     }
     //capitalizes the first letter of the content

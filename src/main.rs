@@ -25,18 +25,8 @@ use std::{
 fn main() {
     let mut table = PrintableTable::new();
     let args: Vec<String> = env::args().collect();
-    let mut conf = Config::new(args);
-    conf.capitalize_first_letter();
-    //------------------------------------------
-    // if args.len() < 2 {
-    //     print!("Usage: {} [country] [region] [city]", args[0]);
-    //     return;
-    // }
+    let conf: Config = Config::new(args);
 
-    // let country: &String = &args[1];
-    // let region: &String = &args[2];
-    // let city: &String = &args[3];
-    //----------------------------------------------
     let coordinates: coordinates::Coordinates =
         coordinates::Coordinates::new(&conf.country, &conf.city, &conf.region);
 
