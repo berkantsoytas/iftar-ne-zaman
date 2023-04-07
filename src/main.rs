@@ -11,7 +11,9 @@ mod timefromplace;
 
 //-------------------
 use crate::args_config::Config;
+use crate::coordinates::Coordinates;
 use crate::table::PrintableTable;
+use crate::timefromcoordinates::TimeFromCoordinates;
 //-----------------------
 
 use prettytable::{Cell, Row};
@@ -27,10 +29,9 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let conf: Config = Config::new(args);
 
-    let coordinates: coordinates::Coordinates =
-        coordinates::Coordinates::new(&conf.country, &conf.city, &conf.region);
+    let coordinates: Coordinates = Coordinates::new(&conf.country, &conf.city, &conf.region);
 
-    let coordinate: &coordinates::Coordinates = coordinates.get_coordinates();
+    let coordinate: &Coordinates = coordinates.get_coordinates();
 
     // get time to (YYYY-MM-DD) format std lib but if hour is 24:00:00 it will be 00:00:00
     let mut date = chrono::Local::now().format("%Y-%m-%d").to_string();
@@ -50,14 +51,13 @@ fn main() {
             .to_string();
     }
 
-    let time_from_coordinates: timefromcoordinates::TimeFromCoordinates =
-        timefromcoordinates::TimeFromCoordinates::new(
-            &coordinate.latitude.to_owned().to_string(),
-            &coordinate.longitude.to_owned().to_string(),
-            &date,
-            "1",
-            "180",
-        );
+    let time_from_coordinates: TimeFromCoordinates = TimeFromCoordinates::new(
+        &coordinate.latitude.to_owned().to_string(),
+        &coordinate.longitude.to_owned().to_string(),
+        &date,
+        "1",
+        "180",
+    );
 
     let city = time_from_coordinates.get_times();
 
