@@ -1,17 +1,20 @@
+mod args_config;
 mod citiesregions;
 mod coordinates;
 mod countries;
 mod find_coordinate;
 mod regions;
 mod request;
+mod table;
 mod timefromcoordinates;
 mod timefromplace;
+
 //-------------------
 use crate::args_config::Config;
-mod args_config;
+use crate::table::PrintableTable;
 //-----------------------
-use prettytable::{row, Cell, Row, Table};
 
+use prettytable::{Cell, Row};
 use termion::{color, style};
 
 use std::{
@@ -19,9 +22,8 @@ use std::{
     io::{stdout, Write},
 };
 
-
 fn main() {
-    let mut table = Table::new();
+    let mut table = PrintableTable::new();
     let args: Vec<String> = env::args().collect();
     let mut conf = Config::new(args);
     conf.capitalize_first_letter();
@@ -36,7 +38,7 @@ fn main() {
     // let city: &String = &args[3];
     //----------------------------------------------
     let coordinates: coordinates::Coordinates =
-        coordinates::Coordinates::new(&conf.country,&conf.city,&conf.region);
+        coordinates::Coordinates::new(&conf.country, &conf.city, &conf.region);
 
     let coordinate: &coordinates::Coordinates = coordinates.get_coordinates();
 
@@ -69,13 +71,13 @@ fn main() {
 
     let city = time_from_coordinates.get_times();
 
-    table.add_row(row![
-        "Tarih", "Imsak", "Gunes", "Ogle", "Ikindi", "Aksam", "Yatsi"
+    table.add_row(vec![
+        "Tarih", "Imsak", "Gunes", "Ogle", "Ikindi", "Aksam", "Yatsi",
     ]);
 
     println!("\nBugunun ibadet saatleri:");
 
-    let mut aksam = String::new();
+    let mut aksam: String = String::new();
 
     for (timezone, times) in city {
         let row = Row::new(vec![
@@ -90,10 +92,10 @@ fn main() {
 
         aksam = times[4].to_owned().to_string();
 
-        table.add_row(row);
+        table.add_row_cell(row);
     }
 
-    table.printstd();
+    table.print();
 
     // check if aksam is grater than time now and if it is then print aksam time
 
