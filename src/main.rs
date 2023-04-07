@@ -87,14 +87,6 @@ fn main() {
 
     table.print();
 
-    // check if aksam is grater than time now and if it is then print aksam time
-
-    // parse akşam and time now to i32
-    // but aksam variable format is HH:MM and time now format is HH:MM:SS
-    // so we need to remove :SS from time now
-
-    // TODO: print remaining time to aksam
-
     // parse aksam to DateTime
     let aksam = chrono::NaiveTime::parse_from_str(&aksam, "%H:%M").unwrap();
 
